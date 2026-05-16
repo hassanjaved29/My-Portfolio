@@ -4,422 +4,605 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Hassan Javed Abbasi — Creative Freelancer</title>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Mono:wght@300;400;500&family=Bebas+Neue&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,700;1,400;1,700&family=Instrument+Serif:ital@0;1&family=DM+Mono:wght@300;400;500&family=Bebas+Neue&display=swap" rel="stylesheet" />
   <style>
-    /* ── RESET ── */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html { scroll-behavior: smooth; }
 
     :root {
-      --cream: #f5f0e8;
-      --ink:   #1a1410;
-      --warm:  #c8a96e;
-      --rust:  #b5451b;
-      --muted: #6b5f52;
-      --border: rgba(26,20,16,0.12);
-      --pad: clamp(1.2rem, 5vw, 4rem);
+      --black:   #080706;
+      --deep:    #0f0d0b;
+      --surface: #161310;
+      --gold:    #c9a84c;
+      --gold-lt: #e2c47a;
+      --gold-dk: #9a7830;
+      --cream:   #f2ece0;
+      --muted:   rgba(242,236,224,0.42);
+      --border:  rgba(201,168,76,0.14);
+      --pad:     clamp(1.4rem, 5vw, 4.5rem);
+      --r: 0px;
     }
 
     body {
-      background: var(--cream);
-      color: var(--ink);
-      font-family: 'Cormorant Garamond', Georgia, serif;
+      background: var(--black);
+      color: var(--cream);
+      font-family: 'Instrument Serif', Georgia, serif;
       overflow-x: hidden;
     }
 
-    /* ── CUSTOM CURSOR — desktop only ── */
-    @media (pointer: fine) { body { cursor: none; } }
-    .cursor, .cursor-ring { display: none; }
-    @media (pointer: fine) { .cursor, .cursor-ring { display: block; } }
-    .cursor {
-      width: 10px; height: 10px; background: var(--rust);
-      border-radius: 50%; position: fixed; top: 0; left: 0;
-      pointer-events: none; z-index: 9999; mix-blend-mode: multiply;
+    /* ── GRAIN OVERLAY ── */
+    body::before {
+      content: '';
+      position: fixed; inset: 0; z-index: 1000; pointer-events: none;
+      opacity: 0.032;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+      background-size: 200px 200px;
     }
-    .cursor-ring {
-      width: 34px; height: 34px; border: 1px solid var(--rust);
-      border-radius: 50%; position: fixed; top: 0; left: 0;
-      pointer-events: none; z-index: 9998; opacity: 0.45;
+
+    /* ── CUSTOM CURSOR ── */
+    @media (pointer:fine) { body { cursor: none; } }
+    .cursor-dot, .cursor-outline { display: none; }
+    @media (pointer:fine) { .cursor-dot, .cursor-outline { display: block; } }
+    .cursor-dot {
+      width: 6px; height: 6px;
+      background: var(--gold);
+      border-radius: 50%; position: fixed;
+      pointer-events: none; z-index: 9999;
+      transition: transform 0.1s;
     }
+    .cursor-outline {
+      width: 36px; height: 36px;
+      border: 1px solid rgba(201,168,76,0.5);
+      border-radius: 50%; position: fixed;
+      pointer-events: none; z-index: 9998;
+      transition: transform 0.08s linear, width 0.25s, height 0.25s, opacity 0.25s;
+    }
+    .cursor-outline.expand { width: 56px; height: 56px; opacity: 0.6; }
 
     /* ── NAV ── */
     nav {
-      position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+      position: fixed; top: 0; left: 0; right: 0; z-index: 500;
       display: flex; justify-content: space-between; align-items: center;
-      padding: 1.3rem var(--pad);
-      background: rgba(245,240,232,0.94);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
+      padding: 1.4rem var(--pad);
+      transition: background 0.4s, border-color 0.4s, backdrop-filter 0.4s;
       border-bottom: 1px solid transparent;
-      transition: border-color 0.3s, box-shadow 0.3s;
     }
     nav.scrolled {
+      background: rgba(8,7,6,0.82);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
       border-color: var(--border);
-      box-shadow: 0 2px 20px rgba(26,20,16,0.07);
     }
     .nav-logo {
       font-family: 'Bebas Neue', sans-serif;
-      font-size: 1.5rem; letter-spacing: 0.15em;
-      color: var(--ink); text-decoration: none; z-index: 201;
+      font-size: 1.6rem; letter-spacing: 0.2em;
+      color: var(--cream); text-decoration: none;
+      position: relative; z-index: 501;
     }
-    .nav-links { display: flex; gap: 2.5rem; list-style: none; }
+    .nav-logo span { color: var(--gold); }
+    .nav-links { display: flex; gap: 2.8rem; list-style: none; }
     .nav-links a {
-      font-family: 'DM Mono', monospace; font-size: 0.68rem;
-      letter-spacing: 0.14em; text-transform: uppercase;
-      color: var(--ink); text-decoration: none;
-      opacity: 0.5; transition: opacity 0.25s;
+      font-family: 'DM Mono', monospace; font-size: 0.64rem;
+      letter-spacing: 0.2em; text-transform: uppercase;
+      color: var(--cream); text-decoration: none;
+      opacity: 0.38; transition: opacity 0.25s, color 0.25s;
+      position: relative;
     }
-    .nav-links a:hover, .nav-links a.active { opacity: 1; }
+    .nav-links a::after {
+      content: ''; position: absolute; bottom: -3px; left: 0;
+      width: 0; height: 1px; background: var(--gold);
+      transition: width 0.3s;
+    }
+    .nav-links a:hover, .nav-links a.active { opacity: 1; color: var(--gold-lt); }
+    .nav-links a:hover::after, .nav-links a.active::after { width: 100%; }
 
     /* Hamburger */
     .hamburger {
       display: none; flex-direction: column; justify-content: space-between;
-      width: 26px; height: 18px; background: none; border: none;
-      cursor: pointer; z-index: 201; padding: 0;
+      width: 28px; height: 18px; background: none; border: none;
+      cursor: pointer; z-index: 501; padding: 0;
     }
     .hamburger span {
-      display: block; width: 100%; height: 1.5px;
-      background: var(--ink); transition: all 0.35s ease;
+      display: block; width: 100%; height: 1px;
+      background: var(--cream); transition: all 0.35s;
     }
-    .hamburger.open span:nth-child(1) { transform: translateY(8.25px) rotate(45deg); }
+    .hamburger.open span:nth-child(1) { transform: translateY(8.5px) rotate(45deg); background: var(--gold); }
     .hamburger.open span:nth-child(2) { opacity: 0; }
-    .hamburger.open span:nth-child(3) { transform: translateY(-8.25px) rotate(-45deg); }
+    .hamburger.open span:nth-child(3) { transform: translateY(-8.5px) rotate(-45deg); background: var(--gold); }
 
-    /* Mobile nav overlay */
+    /* Mobile overlay */
     .mob-nav {
-      position: fixed; inset: 0; z-index: 199; background: var(--ink);
+      position: fixed; inset: 0; z-index: 499;
+      background: var(--black);
       display: flex; flex-direction: column;
-      justify-content: center; align-items: center; gap: 2.2rem;
-      opacity: 0; pointer-events: none; transition: opacity 0.35s;
+      justify-content: center; align-items: center; gap: 2.4rem;
+      opacity: 0; pointer-events: none; transition: opacity 0.4s;
+    }
+    .mob-nav::before {
+      content: 'MENU';
+      position: absolute; font-family: 'Bebas Neue', sans-serif;
+      font-size: 35vw; color: rgba(201,168,76,0.03);
+      pointer-events: none; letter-spacing: 0.05em;
     }
     .mob-nav.open { opacity: 1; pointer-events: all; }
     .mob-nav a {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: clamp(2.8rem, 10vw, 4.5rem); letter-spacing: 0.06em;
-      color: var(--cream); text-decoration: none; transition: color 0.25s;
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.4rem, 9vw, 5rem);
+      color: var(--cream); text-decoration: none;
+      transition: color 0.25s; font-style: italic;
     }
-    .mob-nav a:hover { color: var(--warm); }
-
-    /* ── SHARED ── */
-    .sp { padding: clamp(4rem, 10vw, 7rem) var(--pad); }
-
-    .sec-label {
-      font-family: 'DM Mono', monospace; font-size: 0.62rem;
-      letter-spacing: 0.22em; text-transform: uppercase; color: var(--rust);
-      display: flex; align-items: center; gap: 0.8rem; margin-bottom: 1.3rem;
-    }
-    .sec-label::before {
-      content: ''; display: inline-block;
-      width: 2rem; height: 1px; background: currentColor;
-    }
-    .sec-label.g { color: var(--warm); }
-
-    .sec-h {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: clamp(2.2rem, 5vw, 4rem);
-      font-weight: 300; line-height: 1.08;
-    }
-    .sec-h em { color: var(--rust); font-style: italic; }
-    .sec-h.lt em { color: var(--warm); }
+    .mob-nav a:hover { color: var(--gold); }
 
     /* ── HERO ── */
     .hero {
-      min-height: 100svh; display: grid;
-      grid-template-columns: 1fr 1fr;
+      min-height: 100svh;
+      display: grid; grid-template-columns: 55% 45%;
       position: relative; overflow: hidden;
+    }
+    .hero-canvas {
+      position: absolute; inset: 0; z-index: 0;
     }
     .hero-l {
       display: flex; flex-direction: column; justify-content: flex-end;
-      padding: 8rem var(--pad) 5rem; z-index: 2;
+      padding: 9rem var(--pad) 6rem;
+      position: relative; z-index: 2;
     }
-    .hero-tag {
-      font-family: 'DM Mono', monospace; font-size: 0.62rem;
-      letter-spacing: 0.22em; text-transform: uppercase; color: var(--rust);
-      display: flex; align-items: center; gap: 0.8rem; margin-bottom: 1.5rem;
+    .hero-eyebrow {
+      font-family: 'DM Mono', monospace; font-size: 0.6rem;
+      letter-spacing: 0.28em; text-transform: uppercase;
+      color: var(--gold); opacity: 0.75;
+      display: flex; align-items: center; gap: 1rem;
+      margin-bottom: 1.6rem;
+      animation: fadeUp 1s 0.2s both;
     }
-    .hero-tag::before { content: ''; width: 2rem; height: 1px; background: var(--rust); }
-    .hero-name {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: clamp(3.5rem, 8vw, 8rem);
-      line-height: 0.9; letter-spacing: 0.02em; margin-bottom: 1.8rem;
-    }
-    .hero-name span { color: var(--rust); }
-    .hero-desc {
-      font-size: clamp(1rem, 1.8vw, 1.15rem); font-weight: 300;
-      line-height: 1.75; color: var(--muted);
-      max-width: 36ch; margin-bottom: 2.5rem; font-style: italic;
-    }
-    .hero-btn {
-      display: inline-flex; align-items: center; gap: 0.9rem;
-      font-family: 'DM Mono', monospace; font-size: 0.7rem;
-      letter-spacing: 0.15em; text-transform: uppercase;
-      color: var(--cream); background: var(--ink);
-      padding: 1rem 2rem; text-decoration: none; width: fit-content;
-      transition: background 0.3s, transform 0.3s;
-    }
-    .hero-btn:hover { background: var(--rust); transform: translateX(4px); }
-    .hero-btn::after { content: '→'; }
+    .hero-eyebrow::before { content: ''; width: 2.5rem; height: 1px; background: var(--gold); opacity: 0.5; }
 
-    .hero-r { position: relative; overflow: hidden; min-height: 280px; }
-    .hero-bg {
-      position: absolute; inset: 0; background: var(--ink);
-      display: flex; align-items: center; justify-content: center;
+    .hero-name {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(3.2rem, 7.5vw, 8.5rem);
+      line-height: 0.92; letter-spacing: -0.01em;
+      margin-bottom: 2rem; font-weight: 500;
+      animation: fadeUp 1s 0.35s both;
     }
-    .hero-bg::after {
+    .hero-name .first { color: var(--cream); display: block; }
+    .hero-name .middle { color: var(--cream); display: block; }
+    .hero-name .last {
+      color: transparent;
+      -webkit-text-stroke: 1px var(--gold);
+      display: block; font-style: italic;
+    }
+    .hero-desc {
+      font-size: clamp(0.95rem, 1.6vw, 1.1rem);
+      line-height: 1.9; color: var(--muted);
+      max-width: 38ch; margin-bottom: 3rem;
+      animation: fadeUp 1s 0.5s both;
+    }
+    .hero-cta {
+      display: flex; gap: 1.2rem; align-items: center;
+      animation: fadeUp 1s 0.65s both;
+    }
+    .btn-primary {
+      display: inline-flex; align-items: center; gap: 0.8rem;
+      font-family: 'DM Mono', monospace; font-size: 0.68rem;
+      letter-spacing: 0.16em; text-transform: uppercase;
+      color: var(--black); background: var(--gold);
+      padding: 1.05rem 2.2rem; text-decoration: none;
+      transition: background 0.3s, transform 0.3s;
+      position: relative; overflow: hidden;
+    }
+    .btn-primary::before {
       content: ''; position: absolute; inset: 0;
-      background: linear-gradient(135deg,rgba(181,69,27,.25) 0%,transparent 60%);
+      background: var(--gold-lt); transform: translateX(-100%);
+      transition: transform 0.35s;
     }
-    .hero-art {
-      width: 100%; height: 100%;
-      background: linear-gradient(160deg,#2a1f17,#1a1410 50%,#3d2510);
+    .btn-primary:hover::before { transform: translateX(0); }
+    .btn-primary span { position: relative; z-index: 1; }
+    .btn-primary:hover { transform: translateY(-2px); }
+    .btn-outline {
+      font-family: 'DM Mono', monospace; font-size: 0.68rem;
+      letter-spacing: 0.16em; text-transform: uppercase;
+      color: var(--gold); text-decoration: none; opacity: 0.6;
+      transition: opacity 0.25s;
+    }
+    .btn-outline:hover { opacity: 1; }
+
+    .hero-r {
+      position: relative; overflow: hidden; z-index: 2;
+    }
+    .hero-visual {
+      position: absolute; inset: 0;
       display: flex; align-items: center; justify-content: center;
+      background: linear-gradient(160deg, #1a1208, #0a0806 50%, #1a0e04);
     }
-    .hero-init {
-      position: absolute; bottom: 1.5rem; right: 1.5rem;
+    .hero-visual::before {
+      content: ''; position: absolute; inset: 0;
+      background: radial-gradient(ellipse 70% 60% at 50% 40%, rgba(201,168,76,0.12), transparent 70%);
+    }
+    .monogram-wrap {
+      position: relative; display: flex; align-items: center; justify-content: center;
+    }
+    .monogram-ring {
+      width: min(42vw, 380px); height: min(42vw, 380px);
+      border: 1px solid rgba(201,168,76,0.15);
+      border-radius: 50%; position: absolute;
+      animation: spin 40s linear infinite;
+    }
+    .monogram-ring-2 {
+      width: min(30vw, 270px); height: min(30vw, 270px);
+      border: 1px solid rgba(201,168,76,0.1);
+      border-radius: 50%; position: absolute;
+      animation: spin 28s linear infinite reverse;
+    }
+    .monogram-ring::before {
+      content: '◆'; position: absolute; top: -5px; left: 50%; transform: translateX(-50%);
+      color: var(--gold); font-size: 8px;
+    }
+    .monogram-ring-2::before {
+      content: '◆'; position: absolute; bottom: -5px; right: -5px;
+      color: var(--gold); font-size: 6px; opacity: 0.6;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .monogram-text {
       font-family: 'Bebas Neue', sans-serif;
-      font-size: clamp(4rem, 8vw, 8rem); line-height: 1;
-      color: rgba(245,240,232,.07); pointer-events: none;
+      font-size: clamp(5rem, 12vw, 10rem);
+      color: rgba(242,236,224,0.07);
+      letter-spacing: 0.15em; line-height: 1;
+      position: relative; z-index: 2;
+      text-shadow: 0 0 80px rgba(201,168,76,0.2);
+      animation: pulse 4s ease-in-out infinite;
+    }
+    @keyframes pulse { 0%,100%{opacity:0.4} 50%{opacity:0.7} }
+    .hero-ornament {
+      position: absolute; bottom: 2rem; left: 50%; transform: translateX(-50%);
+      display: flex; flex-direction: column; align-items: center; gap: 0.6rem;
+      font-family: 'DM Mono', monospace; font-size: 0.5rem;
+      letter-spacing: 0.25em; color: rgba(201,168,76,0.35); text-transform: uppercase;
+    }
+    .hero-ornament::after { content: ''; width: 1px; height: 50px; background: linear-gradient(to bottom, rgba(201,168,76,0.4), transparent); }
+
+    .hero-stats {
+      position: absolute; right: 3rem; bottom: 5rem;
+      display: flex; flex-direction: column; gap: 2rem; z-index: 3;
+      animation: fadeUp 1s 0.9s both;
+    }
+    .stat { text-align: right; }
+    .stat-num {
+      font-family: 'Playfair Display', serif; font-size: 2.2rem;
+      color: var(--gold); line-height: 1; display: block; font-style: italic;
+    }
+    .stat-lbl {
+      font-family: 'DM Mono', monospace; font-size: 0.55rem;
+      letter-spacing: 0.2em; text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── DIVIDER ── */
+    .gold-divider {
+      height: 1px;
+      background: linear-gradient(to right, transparent, var(--gold), transparent);
+      opacity: 0.2; margin: 0;
+    }
+
+    /* ── SHARED SECTION STUFF ── */
+    .sp { padding: clamp(5rem, 11vw, 8rem) var(--pad); }
+
+    .tag {
+      font-family: 'DM Mono', monospace; font-size: 0.58rem;
+      letter-spacing: 0.28em; text-transform: uppercase; color: var(--gold);
+      display: flex; align-items: center; gap: 0.9rem; margin-bottom: 1.2rem;
+      opacity: 0.8;
+    }
+    .tag::before { content: ''; width: 2rem; height: 1px; background: var(--gold); opacity: 0.5; }
+
+    .sec-h {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.4rem, 5.5vw, 5rem);
+      font-weight: 500; line-height: 1.0;
+      letter-spacing: -0.01em;
+    }
+    .sec-h em { font-style: italic; color: var(--gold); }
+    .sec-h .ghost {
+      -webkit-text-stroke: 1px rgba(201,168,76,0.3);
+      color: transparent;
     }
 
     /* ── ABOUT ── */
-    .about { border-top: 1px solid var(--border); }
-    .about-g {
-      display: grid; grid-template-columns: 1fr 2fr;
-      gap: clamp(2rem, 6vw, 6rem); align-items: start;
+    .about { background: var(--deep); }
+    .about-inner {
+      display: grid; grid-template-columns: 1fr 1.8fr;
+      gap: clamp(3rem, 7vw, 7rem); align-items: start;
+    }
+    .about-sticky { position: sticky; top: 9rem; }
+    .about-num {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(6rem, 12vw, 10rem); font-style: italic;
+      color: transparent; -webkit-text-stroke: 1px rgba(201,168,76,0.12);
+      line-height: 1; margin-bottom: 1rem;
     }
     .about-r p {
-      font-size: clamp(1rem, 1.6vw, 1.2rem); line-height: 1.8;
-      color: var(--muted); font-weight: 300; margin-bottom: 1.4rem;
+      font-size: clamp(1rem, 1.5vw, 1.18rem); line-height: 1.9;
+      color: var(--muted); margin-bottom: 1.5rem; font-weight: 300;
     }
-    .skills-g {
+    .about-r p strong { color: var(--cream); font-weight: 500; }
+
+    .skills-grid {
       display: grid; grid-template-columns: 1fr 1fr;
-      gap: 0 2rem; margin-top: 2rem;
-      border-top: 1px solid var(--border); padding-top: 1.8rem;
+      gap: 0; margin-top: 2.5rem;
+      border-top: 1px solid var(--border);
     }
-    .skill {
-      font-family: 'DM Mono', monospace; font-size: 0.68rem;
-      letter-spacing: 0.08em; color: var(--muted);
-      padding: 0.55rem 0; border-bottom: 1px solid var(--border);
-      display: flex; align-items: center; gap: 0.55rem;
+    .skill-item {
+      padding: 0.9rem 0;
+      border-bottom: 1px solid var(--border);
+      font-family: 'DM Mono', monospace; font-size: 0.66rem;
+      letter-spacing: 0.1em; color: var(--muted); text-transform: uppercase;
+      display: flex; align-items: center; gap: 0.6rem;
+      transition: color 0.25s;
     }
-    .skill::before { content: '◆'; color: var(--warm); font-size: 0.45rem; }
+    .skill-item:nth-child(odd) { padding-right: 1.5rem; border-right: 1px solid var(--border); }
+    .skill-item:nth-child(even) { padding-left: 1.5rem; }
+    .skill-item:hover { color: var(--gold-lt); }
+    .skill-item::before { content: ''; width: 3px; height: 3px; border-radius: 50%; background: var(--gold); flex-shrink: 0; }
 
     /* ── SERVICES ── */
-    .svc { background: var(--ink); color: var(--cream); }
-    .svc-top {
+    .services { background: var(--black); }
+    .services-top {
       display: flex; justify-content: space-between; align-items: flex-end;
-      flex-wrap: wrap; gap: 1rem; margin-bottom: clamp(2.5rem, 5vw, 4.5rem);
+      flex-wrap: wrap; gap: 1.5rem; margin-bottom: clamp(3rem,6vw,5rem);
     }
     .svc-count {
-      font-family: 'DM Mono', monospace; font-size: 0.62rem;
-      letter-spacing: 0.15em; color: rgba(245,240,232,.28);
+      font-family: 'DM Mono', monospace; font-size: 0.58rem;
+      letter-spacing: 0.2em; color: rgba(242,236,224,0.18);
     }
-    .svc-item {
-      display: grid; grid-template-columns: 3.5rem 1fr auto;
-      align-items: center; gap: 1.5rem; padding: 2rem 0;
-      border-top: 1px solid rgba(245,240,232,.07);
-      transition: padding-left 0.35s;
+
+    .svc-list { display: flex; flex-direction: column; }
+    .svc-row {
+      display: grid; grid-template-columns: 4rem 1fr 1fr auto;
+      align-items: start; gap: 2rem;
+      padding: 2.4rem 0;
+      border-top: 1px solid var(--border);
+      transition: padding-left 0.4s cubic-bezier(0.25,0.46,0.45,0.94);
+      cursor: default;
     }
-    .svc-item:last-child { border-bottom: 1px solid rgba(245,240,232,.07); }
-    .svc-item:hover { padding-left: 1rem; }
-    .svc-n {
-      font-family: 'DM Mono', monospace; font-size: 0.62rem;
-      color: rgba(245,240,232,.2); letter-spacing: 0.1em; transition: color 0.35s;
+    .svc-row:last-child { border-bottom: 1px solid var(--border); }
+    .svc-row:hover { padding-left: 1.2rem; }
+    .svc-no {
+      font-family: 'DM Mono', monospace; font-size: 0.6rem;
+      color: rgba(242,236,224,0.18); letter-spacing: 0.12em;
+      padding-top: 0.3rem; transition: color 0.35s;
     }
-    .svc-item:hover .svc-n { color: var(--warm); }
-    .svc-info h3 {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: clamp(1.2rem, 2.5vw, 1.6rem); font-weight: 400;
-      margin-bottom: 0.35rem; transition: color 0.35s;
+    .svc-row:hover .svc-no { color: var(--gold); }
+    .svc-name {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.3rem, 2.5vw, 1.9rem); font-weight: 500;
+      transition: color 0.35s;
     }
-    .svc-item:hover .svc-info h3 { color: var(--warm); }
-    .svc-info p {
-      font-size: clamp(0.85rem, 1.3vw, 0.95rem); line-height: 1.6;
-      color: rgba(245,240,232,.38); font-weight: 300; max-width: 52ch;
+    .svc-row:hover .svc-name { color: var(--gold-lt); }
+    .svc-desc {
+      font-size: clamp(0.85rem, 1.2vw, 0.95rem); line-height: 1.7;
+      color: var(--muted); font-weight: 300; padding-top: 0.25rem;
     }
-    .svc-arr {
-      font-size: 1.4rem; color: rgba(245,240,232,.14);
-      transition: color 0.35s, transform 0.35s;
+    .svc-arrow {
+      font-size: 1.2rem; color: rgba(242,236,224,0.15);
+      transition: color 0.35s, transform 0.35s; padding-top: 0.3rem;
     }
-    .svc-item:hover .svc-arr { color: var(--warm); transform: translateX(6px); }
+    .svc-row:hover .svc-arrow { color: var(--gold); transform: translate(6px, -4px); }
 
     /* ── WORK ── */
-    .work { border-top: 1px solid var(--border); }
-    .work-top { margin-bottom: clamp(2rem, 4vw, 3.5rem); }
-    .work-g {
-      display: grid; grid-template-columns: repeat(3,1fr);
-      gap: clamp(0.7rem, 1.5vw, 1.4rem);
+    .work { background: var(--surface); }
+    .work-header {
+      display: flex; justify-content: space-between; align-items: flex-end;
+      flex-wrap: wrap; gap: 1rem; margin-bottom: clamp(2.5rem,5vw,4.5rem);
+    }
+    .work-all {
+      font-family: 'DM Mono', monospace; font-size: 0.62rem;
+      letter-spacing: 0.16em; text-transform: uppercase;
+      color: var(--gold); text-decoration: none; opacity: 0.55;
+      transition: opacity 0.25s;
+    }
+    .work-all:hover { opacity: 1; }
+    .work-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: clamp(0.8rem, 1.5vw, 1.5rem);
     }
     .card {
       position: relative; overflow: hidden;
-      background: var(--ink); aspect-ratio: 4/5; cursor: pointer;
+      aspect-ratio: 4/5; background: var(--deep);
+      cursor: pointer;
     }
+    .card::before {
+      content: ''; position: absolute; inset: 0;
+      border: 1px solid transparent;
+      transition: border-color 0.4s; z-index: 5;
+    }
+    .card:hover::before { border-color: rgba(201,168,76,0.3); }
     .card-bg {
       width: 100%; height: 100%;
       display: flex; align-items: center; justify-content: center;
-      font-size: clamp(2.5rem, 5vw, 5rem);
-      transition: transform 0.6s ease;
+      font-size: clamp(3rem, 6vw, 5rem);
+      transition: transform 0.7s cubic-bezier(0.25,0.46,0.45,0.94);
     }
-    .card:hover .card-bg { transform: scale(1.07); }
-    .card-ov {
+    .card:hover .card-bg { transform: scale(1.09); }
+    .card-overlay {
       position: absolute; inset: 0;
-      background: linear-gradient(to top,rgba(26,20,16,.9),transparent 60%);
-      opacity: 0; transition: opacity 0.4s;
+      background: linear-gradient(to top, rgba(8,7,6,0.94) 0%, rgba(8,7,6,0.3) 50%, transparent 100%);
+      opacity: 0; transition: opacity 0.45s;
     }
-    .card-n {
-      position: absolute; top: 1rem; right: 1rem;
-      font-family: 'DM Mono', monospace; font-size: 0.6rem;
-      color: rgba(245,240,232,.28); z-index: 3;
+    .card:hover .card-overlay { opacity: 1; }
+    .card-tag {
+      position: absolute; top: 1.2rem; right: 1.2rem; z-index: 3;
+      font-family: 'DM Mono', monospace; font-size: 0.52rem;
+      color: rgba(242,236,224,0.25); letter-spacing: 0.14em;
     }
-    .card-inf {
+    .card-info {
       position: absolute; bottom: 0; left: 0; right: 0;
-      padding: 1.4rem; z-index: 4;
-      transform: translateY(100%); transition: transform 0.4s;
+      padding: 1.8rem; z-index: 4;
+      transform: translateY(110%); transition: transform 0.45s cubic-bezier(0.25,0.46,0.45,0.94);
     }
-    .card:hover .card-ov { opacity: 1; }
-    .card:hover .card-inf { transform: translateY(0); }
-    /* Touch: always show */
+    .card:hover .card-info { transform: translateY(0); }
     @media (hover:none) {
-      .card-ov { opacity: 1; }
-      .card-inf { transform: translateY(0); }
+      .card-overlay { opacity: 1; }
+      .card-info { transform: translateY(0); }
     }
-    .card-inf h3 {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: clamp(1rem, 2vw, 1.4rem); color: var(--cream);
-      font-weight: 400; margin-bottom: 0.25rem;
+    .card-info h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1rem, 2vw, 1.45rem); color: var(--cream);
+      font-weight: 500; margin-bottom: 0.4rem; font-style: italic;
     }
-    .card-inf p {
-      font-family: 'DM Mono', monospace; font-size: 0.6rem;
-      color: var(--warm); letter-spacing: 0.15em; text-transform: uppercase;
+    .card-info p {
+      font-family: 'DM Mono', monospace; font-size: 0.56rem;
+      color: var(--gold); letter-spacing: 0.2em; text-transform: uppercase;
+    }
+    .card-line {
+      width: 2rem; height: 1px; background: var(--gold);
+      margin: 0.7rem 0; opacity: 0.6;
     }
 
     /* ── CONTACT ── */
-    .contact { background: var(--ink); color: var(--cream); position: relative; overflow: hidden; }
-    .contact::before {
-      content: 'HELLO'; position: absolute; right: -2rem; top: 50%;
-      transform: translateY(-50%);
+    .contact {
+      background: var(--deep);
+      position: relative; overflow: hidden;
+    }
+    .contact-glow {
+      position: absolute; left: 50%; top: 50%; transform: translate(-50%,-50%);
+      width: 70vw; height: 70vw; max-width: 700px; max-height: 700px;
+      border-radius: 50%; pointer-events: none;
+      background: radial-gradient(ellipse at center, rgba(201,168,76,0.05), transparent 70%);
+    }
+    .contact-bg-text {
+      position: absolute; right: -1rem; bottom: -3rem;
       font-family: 'Bebas Neue', sans-serif;
-      font-size: clamp(6rem, 18vw, 18rem); line-height: 1;
-      color: rgba(245,240,232,.025); pointer-events: none; white-space: nowrap;
+      font-size: clamp(8rem, 20vw, 22rem);
+      color: rgba(201,168,76,0.025);
+      pointer-events: none; white-space: nowrap; line-height: 1;
     }
-    .contact-g {
+    .contact-grid {
       display: grid; grid-template-columns: 1fr 1fr;
-      gap: clamp(3rem, 6vw, 6rem); align-items: start; position: relative; z-index: 2;
+      gap: clamp(3.5rem, 7vw, 7rem);
+      align-items: start; position: relative; z-index: 2;
     }
-    .c-left h2 { margin-bottom: 1.2rem; }
-    .c-left > p {
-      font-size: clamp(0.95rem, 1.4vw, 1.1rem); line-height: 1.8;
-      color: rgba(245,240,232,.45); font-weight: 300; max-width: 40ch;
+    .c-left h2 { margin-bottom: 1.5rem; }
+    .c-lead {
+      font-size: clamp(0.95rem, 1.4vw, 1.1rem); line-height: 1.85;
+      color: var(--muted); max-width: 38ch; margin-bottom: 3rem;
     }
-    .c-details { margin-top: 2.5rem; display: flex; flex-direction: column; gap: 1.4rem; }
-    .c-item { display: flex; flex-direction: column; gap: 0.25rem; }
-    .c-lbl {
-      font-family: 'DM Mono', monospace; font-size: 0.58rem;
-      letter-spacing: 0.22em; text-transform: uppercase; color: var(--warm);
+    .c-details { display: flex; flex-direction: column; gap: 2rem; }
+    .c-row { display: flex; flex-direction: column; gap: 0.3rem; }
+    .c-label {
+      font-family: 'DM Mono', monospace; font-size: 0.54rem;
+      letter-spacing: 0.28em; text-transform: uppercase; color: var(--gold);
+      opacity: 0.65;
     }
-    .c-val {
-      font-size: clamp(0.9rem, 1.4vw, 1rem); color: var(--cream);
-      font-weight: 300; text-decoration: none; transition: color 0.25s;
-      word-break: break-all;
+    .c-value {
+      font-size: clamp(0.9rem, 1.3vw, 1rem);
+      color: var(--cream); text-decoration: none; font-weight: 300;
+      transition: color 0.25s; word-break: break-all;
     }
-    .c-val:hover { color: var(--warm); }
-    .c-form { display: flex; flex-direction: column; gap: 1.4rem; }
-    .fg { display: flex; flex-direction: column; gap: 0.45rem; }
+    .c-value:hover { color: var(--gold-lt); }
+
+    /* Form */
+    .c-form { display: flex; flex-direction: column; gap: 1.8rem; }
+    .fg { display: flex; flex-direction: column; gap: 0.5rem; }
     .fg label {
-      font-family: 'DM Mono', monospace; font-size: 0.58rem;
-      letter-spacing: 0.2em; text-transform: uppercase; color: rgba(245,240,232,.35);
+      font-family: 'DM Mono', monospace; font-size: 0.54rem;
+      letter-spacing: 0.24em; text-transform: uppercase;
+      color: rgba(242,236,224,0.3);
     }
     .fg input, .fg textarea {
-      background: transparent; border: none;
-      border-bottom: 1px solid rgba(245,240,232,.15);
-      padding: 0.75rem 0; color: var(--cream);
-      font-family: 'Cormorant Garamond', serif;
-      font-size: clamp(1rem, 1.5vw, 1.1rem); font-weight: 300;
-      outline: none; width: 100%; transition: border-color 0.3s;
+      background: rgba(255,255,255,0.02);
+      border: none; border-bottom: 1px solid rgba(201,168,76,0.18);
+      padding: 0.9rem 0.1rem;
+      color: var(--cream);
+      font-family: 'Instrument Serif', serif;
+      font-size: clamp(1rem, 1.4vw, 1.1rem); font-weight: 300;
+      outline: none; width: 100%;
+      transition: border-color 0.35s, background 0.35s;
       -webkit-appearance: none; border-radius: 0;
     }
-    .fg input:focus, .fg textarea:focus { border-color: var(--warm); }
-    .fg textarea { resize: vertical; min-height: 90px; }
-    .f-btn {
-      background: var(--warm); color: var(--ink); border: none;
-      padding: 1rem 2.2rem; font-family: 'DM Mono', monospace;
-      font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase;
-      cursor: pointer; width: fit-content; margin-top: 0.3rem;
-      transition: background 0.3s, transform 0.3s, color 0.3s;
-      -webkit-appearance: none; border-radius: 0;
+    .fg input:focus, .fg textarea:focus {
+      border-color: var(--gold);
+      background: rgba(201,168,76,0.03);
     }
-    .f-btn:hover { background: var(--rust); color: var(--cream); transform: translateX(4px); }
+    .fg input::placeholder, .fg textarea::placeholder { color: rgba(242,236,224,0.18); }
+    .fg textarea { resize: vertical; min-height: 100px; }
+    .f-submit {
+      background: transparent;
+      border: 1px solid rgba(201,168,76,0.35);
+      padding: 1.05rem 2.4rem;
+      font-family: 'DM Mono', monospace; font-size: 0.68rem;
+      letter-spacing: 0.2em; text-transform: uppercase;
+      color: var(--gold); cursor: pointer; width: fit-content;
+      transition: background 0.35s, color 0.35s, border-color 0.35s, transform 0.3s;
+      -webkit-appearance: none; border-radius: 0; margin-top: 0.4rem;
+    }
+    .f-submit:hover {
+      background: var(--gold); color: var(--black);
+      border-color: var(--gold); transform: translateY(-2px);
+    }
 
     /* ── FOOTER ── */
     footer {
-      background: #0e0b08; color: rgba(245,240,232,.22);
-      padding: 1.8rem var(--pad);
+      background: var(--black);
+      border-top: 1px solid var(--border);
+      padding: 2rem var(--pad);
       display: flex; justify-content: space-between; align-items: center;
-      flex-wrap: wrap; gap: 0.6rem;
-      font-family: 'DM Mono', monospace; font-size: 0.58rem; letter-spacing: 0.12em;
+      flex-wrap: wrap; gap: 0.8rem;
+      font-family: 'DM Mono', monospace; font-size: 0.54rem;
+      letter-spacing: 0.15em; color: rgba(242,236,224,0.18);
     }
+    footer .footer-logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.1rem; letter-spacing: 0.2em;
+      color: rgba(242,236,224,0.3);
+    }
+    footer .footer-logo span { color: rgba(201,168,76,0.4); }
 
     /* ── FADE-IN ── */
-    .fi { opacity: 0; transform: translateY(26px); transition: opacity .75s, transform .75s; }
+    .fi { opacity: 0; transform: translateY(32px); transition: opacity 0.85s, transform 0.85s; }
     .fi.v { opacity: 1; transform: translateY(0); }
 
-    /* ══════════════════════════════════
-       RESPONSIVE BREAKPOINTS
-    ══════════════════════════════════ */
-
-    /* Tablet — ≤900px */
-    @media (max-width: 900px) {
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 960px) {
       .nav-links { display: none; }
       .hamburger { display: flex; }
-
-      .hero { grid-template-columns: 1fr; }
-      .hero-l { padding-top: 7rem; justify-content: center; min-height: 55vh; }
-      .hero-desc { max-width: 100%; }
+      .hero { grid-template-columns: 1fr; min-height: auto; }
+      .hero-l { padding: 8rem var(--pad) 4rem; min-height: 60svh; justify-content: flex-end; }
       .hero-r { min-height: 55vw; }
-
-      .about-g { grid-template-columns: 1fr; gap: 2.5rem; }
-
-      .svc-top { flex-direction: column; align-items: flex-start; }
-
-      .work-g { grid-template-columns: repeat(2,1fr); }
-
-      .contact-g { grid-template-columns: 1fr; gap: 3rem; }
-      .contact::before { display: none; }
+      .hero-stats { right: 1.5rem; bottom: 2rem; gap: 1.2rem; }
+      .about-inner { grid-template-columns: 1fr; gap: 2.5rem; }
+      .about-sticky { position: static; }
+      .svc-row { grid-template-columns: 3rem 1fr; gap: 1rem; }
+      .svc-desc, .svc-arrow { display: none; }
+      .work-grid { grid-template-columns: repeat(2,1fr); }
+      .contact-grid { grid-template-columns: 1fr; gap: 3.5rem; }
+      .contact-bg-text { display: none; }
     }
-
-    /* Mobile — ≤540px */
-    @media (max-width: 540px) {
-      :root { --pad: 1.2rem; }
-
-      .hero-l { min-height: auto; padding: 6.5rem var(--pad) 3.5rem; }
-      .hero-r { min-height: 65vw; }
-      .hero-init { font-size: 4rem; }
-
-      .skills-g { grid-template-columns: 1fr; gap: 0; }
-
-      .svc-item { grid-template-columns: 2.4rem 1fr; gap: 0.8rem; padding: 1.4rem 0; }
-      .svc-arr { display: none; }
-
-      .work-g { grid-template-columns: 1fr; gap: 0.7rem; }
+    @media (max-width: 560px) {
+      :root { --pad: 1.3rem; }
+      .hero-l { padding: 7rem var(--pad) 3rem; }
+      .hero-r { min-height: 70vw; }
+      .hero-stats { display: none; }
+      .skills-grid { grid-template-columns: 1fr; }
+      .skill-item:nth-child(odd) { border-right: none; padding-right: 0; }
+      .skill-item:nth-child(even) { padding-left: 0; }
+      .work-grid { grid-template-columns: 1fr; }
       .card { aspect-ratio: 16/9; }
-
-      footer { flex-direction: column; text-align: center; }
-    }
-
-    /* Large desktop — ≥1400px */
-    @media (min-width: 1400px) {
-      .hero-l { padding: 10rem 5rem 6rem; }
+      footer { flex-direction: column; align-items: center; text-align: center; }
     }
   </style>
 </head>
 <body>
 
-  <div class="cursor" id="cursor"></div>
-  <div class="cursor-ring" id="cursorRing"></div>
+  <div class="cursor-dot" id="cursorDot"></div>
+  <div class="cursor-outline" id="cursorOutline"></div>
 
   <!-- NAV -->
   <nav id="nav">
-    <a href="#home" class="nav-logo">HJA</a>
+    <a href="#home" class="nav-logo">HJ<span>A</span></a>
     <ul class="nav-links" id="navLinks">
       <li><a href="#about">About</a></li>
       <li><a href="#services">Services</a></li>
@@ -441,158 +624,209 @@
 
   <!-- HERO -->
   <section class="hero" id="home">
+    <canvas class="hero-canvas" id="heroCanvas"></canvas>
+
     <div class="hero-l">
-      <div class="hero-tag">Based in Islamabad, Pakistan</div>
-      <h1 class="hero-name">Hassan<br/>Javed<br/><span>Abbasi</span></h1>
+      <div class="hero-eyebrow">Based in Islamabad, Pakistan</div>
+      <h1 class="hero-name">
+        <span class="first">Hassan</span>
+        <span class="middle">Javed</span>
+        <span class="last">Abbasi</span>
+      </h1>
       <p class="hero-desc">Freelance creative specializing in video editing, graphic design, WordPress development &amp; digital storytelling.</p>
-      <a href="#contact" class="hero-btn">Start a Project</a>
+      <div class="hero-cta">
+        <a href="#contact" class="btn-primary"><span>Start a Project</span> <span>→</span></a>
+        <a href="#work" class="btn-outline">View Work</a>
+      </div>
     </div>
+
     <div class="hero-r">
-      <div class="hero-bg">
-        <div class="hero-art">
-          <!--
-            TO USE YOUR OWN PHOTO:
-            Replace everything inside .hero-bg with:
-            <img src="profile.jpg" style="width:100%;height:100%;object-fit:cover;opacity:.65;mix-blend-mode:luminosity" alt="Hassan Javed Abbasi">
-          -->
-          <svg width="160" height="200" viewBox="0 0 160 200" fill="none" xmlns="http://www.w3.org/2000/svg" style="opacity:.18">
-            <ellipse cx="80" cy="72" rx="44" ry="48" fill="#c8a96e"/>
-            <path d="M4 200 Q4 132 80 132 Q156 132 156 200" fill="#c8a96e"/>
-          </svg>
+      <div class="hero-visual">
+        <div class="monogram-wrap">
+          <div class="monogram-ring"></div>
+          <div class="monogram-ring-2"></div>
+          <div class="monogram-text">HJA</div>
         </div>
       </div>
-      <div class="hero-init">HJA</div>
+      <div class="hero-ornament">Scroll</div>
+    </div>
+
+    <div class="hero-stats fi">
+      <div class="stat">
+        <span class="stat-num" data-count="50">0</span>
+        <span class="stat-lbl">Projects Completed</span>
+      </div>
+      <div class="stat">
+        <span class="stat-num" data-count="4">0</span>
+        <span class="stat-lbl">Years Experience</span>
+      </div>
     </div>
   </section>
+
+  <div class="gold-divider"></div>
 
   <!-- ABOUT -->
   <section class="about sp" id="about">
-    <div class="about-g">
-      <div class="fi">
-        <div class="sec-label">About Me</div>
-        <h2 class="sec-h">Turning<br/><em>ideas</em><br/>into craft.</h2>
+    <div class="about-inner">
+      <div class="about-sticky fi">
+        <div class="tag">About Me</div>
+        <h2 class="sec-h">Turning<br/><em>ideas</em><br/>into <span class="ghost">craft.</span></h2>
+        <div class="about-num">01</div>
       </div>
       <div class="about-r fi">
-        <p>I'm a passionate freelancer with a sharp eye for detail and a love for creative work. From cinematic video edits to bold brand identities, I bring ideas to life with care and intention.</p>
-        <p>Always open to exciting collaborations, I believe the best work happens at the intersection of creativity and craft — where technical skill meets genuine artistic vision.</p>
-        <div class="skills-g">
-          <div class="skill">Adobe Premiere Pro</div>
-          <div class="skill">After Effects</div>
-          <div class="skill">Adobe Photoshop</div>
-          <div class="skill">Adobe Illustrator</div>
-          <div class="skill">WordPress Development</div>
-          <div class="skill">Computer Networking</div>
-          <div class="skill">Logo &amp; Brand Design</div>
-          <div class="skill">Video Production</div>
+        <p>I'm a passionate freelancer with a <strong>sharp eye for detail</strong> and a love for creative work. From cinematic video edits to bold brand identities, I bring ideas to life with care and intention.</p>
+        <p>Always open to exciting collaborations, I believe the best work happens at the intersection of creativity and craft — where <strong>technical skill meets genuine artistic vision.</strong></p>
+        <div class="skills-grid">
+          <div class="skill-item">Adobe Premiere Pro</div>
+          <div class="skill-item">After Effects</div>
+          <div class="skill-item">Adobe Photoshop</div>
+          <div class="skill-item">Adobe Illustrator</div>
+          <div class="skill-item">WordPress Dev</div>
+          <div class="skill-item">Computer Networking</div>
+          <div class="skill-item">Logo &amp; Brand Design</div>
+          <div class="skill-item">Video Production</div>
         </div>
       </div>
     </div>
   </section>
 
+  <div class="gold-divider"></div>
+
   <!-- SERVICES -->
-  <section class="svc sp" id="services">
-    <div class="svc-top fi">
+  <section class="services sp" id="services">
+    <div class="services-top fi">
       <div>
-        <div class="sec-label g">What I Do</div>
-        <h2 class="sec-h lt">My <em>Services</em></h2>
+        <div class="tag">What I Do</div>
+        <h2 class="sec-h">My <em>Services</em></h2>
       </div>
       <div class="svc-count">04 Specializations</div>
     </div>
-    <div>
-      <div class="svc-item fi">
-        <div class="svc-n">01</div>
-        <div class="svc-info">
-          <h3>Professional Video Editing</h3>
-          <p>High-quality edits, seamless transitions, and motion graphics using Adobe Premiere Pro and After Effects. Cinematic storytelling tailored to your brand.</p>
-        </div>
-        <div class="svc-arr">→</div>
+    <div class="svc-list">
+      <div class="svc-row fi">
+        <div class="svc-no">01</div>
+        <div class="svc-name">Professional Video Editing</div>
+        <div class="svc-desc">High-quality edits, seamless transitions, and motion graphics using Adobe Premiere Pro and After Effects. Cinematic storytelling tailored to your brand.</div>
+        <div class="svc-arrow">↗</div>
       </div>
-      <div class="svc-item fi">
-        <div class="svc-n">02</div>
-        <div class="svc-info">
-          <h3>Graphics Designing</h3>
-          <p>Logos, social media content, branding materials, and visual identities crafted in Photoshop and Illustrator with a creative, strategic eye.</p>
-        </div>
-        <div class="svc-arr">→</div>
+      <div class="svc-row fi">
+        <div class="svc-no">02</div>
+        <div class="svc-name">Graphics Designing</div>
+        <div class="svc-desc">Logos, social media content, branding materials, and visual identities crafted in Photoshop and Illustrator with a creative, strategic eye.</div>
+        <div class="svc-arrow">↗</div>
       </div>
-      <div class="svc-item fi">
-        <div class="svc-n">03</div>
-        <div class="svc-info">
-          <h3>WordPress Development</h3>
-          <p>Custom WordPress websites with thoughtfully chosen themes, plugins, and configurations — performant, beautiful, and easy to manage.</p>
-        </div>
-        <div class="svc-arr">→</div>
+      <div class="svc-row fi">
+        <div class="svc-no">03</div>
+        <div class="svc-name">WordPress Development</div>
+        <div class="svc-desc">Custom WordPress websites with thoughtfully chosen themes, plugins, and configurations — performant, beautiful, and easy to manage.</div>
+        <div class="svc-arrow">↗</div>
       </div>
-      <div class="svc-item fi">
-        <div class="svc-n">04</div>
-        <div class="svc-info">
-          <h3>Computer Networking</h3>
-          <p>Network setup, troubleshooting, and fundamental configurations for small businesses and home environments.</p>
-        </div>
-        <div class="svc-arr">→</div>
+      <div class="svc-row fi">
+        <div class="svc-no">04</div>
+        <div class="svc-name">Computer Networking</div>
+        <div class="svc-desc">Network setup, troubleshooting, and fundamental configurations for small businesses and home environments.</div>
+        <div class="svc-arrow">↗</div>
       </div>
     </div>
   </section>
+
+  <div class="gold-divider"></div>
 
   <!-- WORK -->
   <section class="work sp" id="work">
-    <div class="work-top fi">
-      <div class="sec-label">Portfolio</div>
-      <h2 class="sec-h">Selected <em>Work</em></h2>
+    <div class="work-header fi">
+      <div>
+        <div class="tag">Portfolio</div>
+        <h2 class="sec-h">Selected <em>Work</em></h2>
+      </div>
+      <a href="#contact" class="work-all">All Projects →</a>
     </div>
-    <div class="work-g">
+    <div class="work-grid">
       <div class="card fi">
-        <div class="card-bg" style="background:linear-gradient(135deg,#1a1410,#2d1f0e)">🎬</div>
-        <div class="card-ov"></div><div class="card-n">01</div>
-        <div class="card-inf"><h3>Brand Video Campaign</h3><p>Video Editing · Motion</p></div>
+        <div class="card-bg" style="background:linear-gradient(135deg,#1c1308,#2d1f0e)">🎬</div>
+        <div class="card-overlay"></div>
+        <div class="card-tag">01</div>
+        <div class="card-info">
+          <div class="card-line"></div>
+          <h3>Brand Video Campaign</h3>
+          <p>Video Editing · Motion</p>
+        </div>
       </div>
       <div class="card fi">
-        <div class="card-bg" style="background:linear-gradient(135deg,#0e1a14,#0d2318)">🎨</div>
-        <div class="card-ov"></div><div class="card-n">02</div>
-        <div class="card-inf"><h3>Logo &amp; Brand Identity</h3><p>Graphics Design · Branding</p></div>
+        <div class="card-bg" style="background:linear-gradient(135deg,#0b1a10,#0e2516)">🎨</div>
+        <div class="card-overlay"></div>
+        <div class="card-tag">02</div>
+        <div class="card-info">
+          <div class="card-line"></div>
+          <h3>Logo &amp; Brand Identity</h3>
+          <p>Graphics Design · Branding</p>
+        </div>
       </div>
       <div class="card fi">
-        <div class="card-bg" style="background:linear-gradient(135deg,#14101a,#1e0d2e)">🌐</div>
-        <div class="card-ov"></div><div class="card-n">03</div>
-        <div class="card-inf"><h3>WordPress Business Site</h3><p>Web Development · CMS</p></div>
+        <div class="card-bg" style="background:linear-gradient(135deg,#12101a,#1e0d2e)">🌐</div>
+        <div class="card-overlay"></div>
+        <div class="card-tag">03</div>
+        <div class="card-info">
+          <div class="card-line"></div>
+          <h3>WordPress Business Site</h3>
+          <p>Web Development · CMS</p>
+        </div>
       </div>
       <div class="card fi">
         <div class="card-bg" style="background:linear-gradient(135deg,#1a1010,#2d1212)">✏️</div>
-        <div class="card-ov"></div><div class="card-n">04</div>
-        <div class="card-inf"><h3>Social Media Pack</h3><p>Graphics Design · Content</p></div>
+        <div class="card-overlay"></div>
+        <div class="card-tag">04</div>
+        <div class="card-info">
+          <div class="card-line"></div>
+          <h3>Social Media Pack</h3>
+          <p>Graphics Design · Content</p>
+        </div>
       </div>
       <div class="card fi">
-        <div class="card-bg" style="background:linear-gradient(135deg,#101a1a,#0d2828)">🎞️</div>
-        <div class="card-ov"></div><div class="card-n">05</div>
-        <div class="card-inf"><h3>Cinematic Reel</h3><p>Video Editing · After Effects</p></div>
+        <div class="card-bg" style="background:linear-gradient(135deg,#0e1a1a,#0d2828)">🎞️</div>
+        <div class="card-overlay"></div>
+        <div class="card-tag">05</div>
+        <div class="card-info">
+          <div class="card-line"></div>
+          <h3>Cinematic Reel</h3>
+          <p>Video Editing · After Effects</p>
+        </div>
       </div>
       <div class="card fi">
-        <div class="card-bg" style="background:linear-gradient(135deg,#141a10,#1c2d0d)">🖥️</div>
-        <div class="card-ov"></div><div class="card-n">06</div>
-        <div class="card-inf"><h3>Network Infrastructure</h3><p>Networking · Configuration</p></div>
+        <div class="card-bg" style="background:linear-gradient(135deg,#111a10,#1c2d0d)">🖥️</div>
+        <div class="card-overlay"></div>
+        <div class="card-tag">06</div>
+        <div class="card-info">
+          <div class="card-line"></div>
+          <h3>Network Infrastructure</h3>
+          <p>Networking · Configuration</p>
+        </div>
       </div>
     </div>
   </section>
 
+  <div class="gold-divider"></div>
+
   <!-- CONTACT -->
   <section class="contact sp" id="contact">
-    <div class="contact-g">
+    <div class="contact-glow"></div>
+    <div class="contact-bg-text">HELLO</div>
+    <div class="contact-grid">
       <div class="fi c-left">
-        <div class="sec-label g">Get In Touch</div>
-        <h2 class="sec-h lt">Let's build<br/><em>something</em><br/>together.</h2>
-        <p>Whether you have a project in mind or just want to say hello — my inbox is always open. Let's create something remarkable.</p>
+        <div class="tag">Get In Touch</div>
+        <h2 class="sec-h">Let's build<br/><em>something</em><br/>together.</h2>
+        <p class="c-lead">Whether you have a project in mind or just want to say hello — my inbox is always open. Let's create something remarkable.</p>
         <div class="c-details">
-          <div class="c-item">
-            <span class="c-lbl">Email</span>
-            <a href="mailto:hassan.javed2003@gmail.com" class="c-val">hassan.javed2003@gmail.com</a>
+          <div class="c-row">
+            <span class="c-label">Email</span>
+            <a href="mailto:hassan.javed2003@gmail.com" class="c-value">hassan.javed2003@gmail.com</a>
           </div>
-          <div class="c-item">
-            <span class="c-lbl">Phone</span>
-            <a href="tel:+923233282323" class="c-val">+92 323 3282323</a>
+          <div class="c-row">
+            <span class="c-label">Phone</span>
+            <a href="tel:+923233282323" class="c-value">+92 323 3282323</a>
           </div>
-          <div class="c-item">
-            <span class="c-lbl">Location</span>
-            <span class="c-val">Islamabad, Pakistan</span>
+          <div class="c-row">
+            <span class="c-label">Location</span>
+            <span class="c-value">Islamabad, Pakistan</span>
           </div>
         </div>
       </div>
@@ -611,21 +845,22 @@
         </div>
         <div class="fg">
           <label for="fm">Message</label>
-          <textarea id="fm" placeholder="Tell me about your project..."></textarea>
+          <textarea id="fm" placeholder="Tell me about your project…"></textarea>
         </div>
-        <button class="f-btn" id="fBtn">Send Message →</button>
+        <button class="f-submit" id="fBtn">Send Message →</button>
       </div>
     </div>
   </section>
 
   <!-- FOOTER -->
   <footer>
+    <span class="footer-logo">HJ<span>A</span></span>
     <span>© 2025 Hassan Javed Abbasi. All Rights Reserved.</span>
     <span>Islamabad, Pakistan</span>
   </footer>
 
   <script>
-    /* HAMBURGER */
+    /* ── HAMBURGER ── */
     const ham = document.getElementById('ham');
     const mobNav = document.getElementById('mobNav');
     function closeNav() {
@@ -639,18 +874,13 @@
       document.body.style.overflow = o ? 'hidden' : '';
     });
 
-    /* NAV SCROLL SHADOW */
-    const nav = document.getElementById('nav');
-    window.addEventListener('scroll', () => nav.classList.toggle('scrolled', scrollY > 20), { passive: true });
+    /* ── NAV SCROLL ── */
+    const navEl = document.getElementById('nav');
+    window.addEventListener('scroll', () => navEl.classList.toggle('scrolled', scrollY > 30), { passive: true });
 
-    /* ACTIVE NAV */
+    /* ── ACTIVE NAV ── */
     const navAs = document.querySelectorAll('.nav-links a');
-    new IntersectionObserver(entries => {
-      entries.forEach(e => {
-        if (e.isIntersecting)
-          navAs.forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + e.target.id));
-      });
-    }, { threshold: 0.35 }).observe && document.querySelectorAll('section[id]').forEach(s =>
+    document.querySelectorAll('section[id]').forEach(s =>
       new IntersectionObserver(entries => {
         entries.forEach(e => {
           if (e.isIntersecting)
@@ -659,45 +889,117 @@
       }, { threshold: 0.35 }).observe(s)
     );
 
-    /* FADE-IN */
+    /* ── FADE-IN ── */
     const fiObs = new IntersectionObserver(entries => {
-      entries.forEach((e, _, arr) => {
-        if (e.isIntersecting) {
-          e.target.style.transitionDelay = '0s';
-          e.target.classList.add('v');
-          fiObs.unobserve(e.target);
-        }
+      entries.forEach(e => {
+        if (e.isIntersecting) { e.target.classList.add('v'); fiObs.unobserve(e.target); }
       });
-    }, { threshold: 0.1 });
+    }, { threshold: 0.08 });
     document.querySelectorAll('.fi').forEach((el, i) => {
-      el.style.transitionDelay = (i % 3) * 0.1 + 's';
+      el.style.transitionDelay = (i % 4) * 0.1 + 's';
       fiObs.observe(el);
     });
 
-    /* CUSTOM CURSOR */
+    /* ── CUSTOM CURSOR ── */
     if (window.matchMedia('(pointer:fine)').matches) {
-      const cur = document.getElementById('cursor');
-      const ring = document.getElementById('cursorRing');
+      const dot  = document.getElementById('cursorDot');
+      const ring = document.getElementById('cursorOutline');
       let mx=0,my=0,rx=0,ry=0;
       document.addEventListener('mousemove', e => {
         mx=e.clientX; my=e.clientY;
-        cur.style.transform = `translate(${mx-5}px,${my-5}px)`;
-      }, { passive:true });
-      (function loop(){ rx+=(mx-rx-17)*.12; ry+=(my-ry-17)*.12; ring.style.transform=`translate(${rx}px,${ry}px)`; requestAnimationFrame(loop); })();
+        dot.style.transform = `translate(${mx-3}px,${my-3}px)`;
+      }, { passive: true });
+      document.querySelectorAll('a,button,.card,.svc-row').forEach(el => {
+        el.addEventListener('mouseenter', () => ring.classList.add('expand'));
+        el.addEventListener('mouseleave', () => ring.classList.remove('expand'));
+      });
+      (function loop(){
+        rx += (mx-rx-18)*0.11; ry += (my-ry-18)*0.11;
+        ring.style.transform = `translate(${rx}px,${ry}px)`;
+        requestAnimationFrame(loop);
+      })();
     }
 
-    /* CONTACT FORM */
-    document.getElementById('fBtn').addEventListener('click', function() {
-      const ids = ['fn','fe','fs','fm'];
+    /* ── COUNTER ANIMATION ── */
+    function animateCount(el, target) {
+      let start = 0;
+      const dur = 1600;
+      const step = timestamp => {
+        if (!start) start = timestamp;
+        const progress = Math.min((timestamp - start) / dur, 1);
+        const eased = 1 - Math.pow(1 - progress, 3);
+        el.textContent = Math.round(eased * target) + (target >= 50 ? '+' : '');
+        if (progress < 1) requestAnimationFrame(step);
+      };
+      requestAnimationFrame(step);
+    }
+    const statNums = document.querySelectorAll('.stat-num[data-count]');
+    const cntObs = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          animateCount(e.target, +e.target.dataset.count);
+          cntObs.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.5 });
+    statNums.forEach(el => cntObs.observe(el));
+
+    /* ── HERO PARTICLE CANVAS ── */
+    const canvas = document.getElementById('heroCanvas');
+    const ctx = canvas.getContext('2d');
+    let W, H, particles = [];
+    function resize() {
+      W = canvas.width  = canvas.offsetWidth;
+      H = canvas.height = canvas.offsetHeight;
+    }
+    resize();
+    window.addEventListener('resize', () => { resize(); initParticles(); }, { passive: true });
+    class Particle {
+      constructor() { this.reset(); }
+      reset() {
+        this.x = Math.random() * W;
+        this.y = Math.random() * H;
+        this.size = Math.random() * 1.2 + 0.2;
+        this.speedX = (Math.random() - 0.5) * 0.25;
+        this.speedY = (Math.random() - 0.5) * 0.25;
+        this.alpha = Math.random() * 0.4 + 0.05;
+        this.pulse = Math.random() * Math.PI * 2;
+      }
+      draw() {
+        this.pulse += 0.008;
+        const a = this.alpha * (0.7 + 0.3 * Math.sin(this.pulse));
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(201,168,76,${a})`;
+        ctx.fill();
+        this.x += this.speedX; this.y += this.speedY;
+        if (this.x < 0 || this.x > W || this.y < 0 || this.y > H) this.reset();
+      }
+    }
+    function initParticles() {
+      particles = Array.from({ length: 80 }, () => new Particle());
+    }
+    initParticles();
+    function animateParticles() {
+      ctx.clearRect(0, 0, W, H);
+      particles.forEach(p => p.draw());
+      requestAnimationFrame(animateParticles);
+    }
+    animateParticles();
+
+    /* ── CONTACT FORM ── */
+    document.getElementById('fBtn').addEventListener('click', function () {
+      const ids = ['fn', 'fe', 'fs', 'fm'];
       const ok = ids.every(id => document.getElementById(id).value.trim());
       if (ok) {
         this.textContent = 'Message Sent ✓';
-        this.style.cssText = 'background:#2a6049;color:#f5f0e8;cursor:default;transform:none';
+        this.style.cssText = 'background:var(--gold);color:var(--black);border-color:var(--gold);cursor:default;transform:none';
         ids.forEach(id => document.getElementById(id).value = '');
-        setTimeout(() => { this.textContent='Send Message →'; this.style.cssText=''; }, 3500);
+        setTimeout(() => { this.textContent = 'Send Message →'; this.style.cssText = ''; }, 3500);
       } else {
-        this.textContent = 'Please fill all fields ↑';
-        setTimeout(() => { this.textContent='Send Message →'; }, 2200);
+        this.textContent = 'Please fill all fields';
+        this.style.cssText = 'border-color:rgba(200,80,80,0.5);color:rgba(220,120,120,0.9)';
+        setTimeout(() => { this.textContent = 'Send Message →'; this.style.cssText = ''; }, 2200);
       }
     });
   </script>
