@@ -24,20 +24,34 @@
     }
 
     body {
-      background: var(--black);
-      color: var(--cream);
-      font-family: 'Instrument Serif', Georgia, serif;
-      overflow-x: hidden;
-    }
+  background:
+    linear-gradient(rgba(0,0,0,0.45), rgba(0,0,0,0.45)),
+    url("https://github.com/hassanjaved29/My-Portfolio/blob/main/1776564532735.png");
 
-    /* GRAIN */
-    body::before {
-      content: '';
-      position: fixed; inset: 0; z-index: 1000; pointer-events: none;
-      opacity: 0.032;
-      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
-      background-size: 200px 200px;
-    }
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+
+  color: var(--cream);
+  font-family: 'Instrument Serif', Georgia, serif;
+  overflow-x: hidden;
+}
+
+/* GRAIN */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  pointer-events: none;
+
+  opacity: 0.032;
+
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+
+  background-size: 200px 200px;
+  }
 
     /* CURSOR */
     @media (pointer:fine) { body { cursor: none; } }
